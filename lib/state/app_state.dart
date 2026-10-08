@@ -7,21 +7,28 @@ import 'badges.dart';
 class AppState extends ChangeNotifier {
   static const _kStates = 'visited_states';
   static const _kGems = 'visited_gems';
+  static const _kDistricts = 'visited_districts';
   static const _kLocale = 'locale';
   static const _kName = 'user_name';
+  static const _kTheme = 'map_theme';
 
   Set<String> visitedStates = {};
   Set<String> visitedGems = {};
+  Set<int> visitedDistricts = {}; // LGD codes
   String locale = 'en';
   String userName = '';
+  int mapTheme = 0;
   bool ready = false;
 
   Future<void> init() async {
     final p = await SharedPreferences.getInstance();
     visitedStates = (p.getStringList(_kStates) ?? <String>[]).toSet();
     visitedGems = (p.getStringList(_kGems) ?? <String>[]).toSet();
+    visitedDistricts =
+        (p.getStringList(_kDistricts) ?? <String>[]).map(int.parse).toSet();
     locale = p.getString(_kLocale) ?? 'en';
     userName = p.getString(_kName) ?? '';
+    mapTheme = p.getInt(_kTheme) ?? 0;
     ready = true;
     notifyListeners();
   }
@@ -30,8 +37,45 @@ class AppState extends ChangeNotifier {
     final p = await SharedPreferences.getInstance();
     await p.setStringList(_kStates, visitedStates.toList());
     await p.setStringList(_kGems, visitedGems.toList());
+    await p.setStringList(
+        _kDistricts, visitedDistricts.map((e) => e.toString()).toList());
     await p.setString(_kLocale, locale);
     await p.setString(_kName, userName);
+    await p.setInt(_kTheme, mapTheme);
+  }
+
+  Future<void> toggleDistrict(int lgd) async {
+    if (visitedDistricts.contains(lgd)) {
+      visitedDistricts.remove(lgd);
+    } else {
+      visitedDistricts.add(lgd);
+    }
+    await _save();
+    notifyListeners();
+  }
+
+  /// Mark every district in the given LGD-code set as visited.
+  Future<void> selectDistricts(Iterable<int> lgds) async {
+    visitedDistricts.addAll(lgds);
+    await _save();
+    notifyListeners();
+  }
+
+  /// Clear visited districts, optionally limited to one state's LGD codes.
+  Future<void> clearDistricts([Iterable<int>? only]) async {
+    if (only == null) {
+      visitedDistricts.clear();
+    } else {
+      visitedDistricts.removeAll(only);
+    }
+    await _save();
+    notifyListeners();
+  }
+
+  Future<void> setMapTheme(int i) async {
+    mapTheme = i;
+    await _save();
+    notifyListeners();
   }
 
   Future<void> toggleState(String name) async {
@@ -40,6 +84,20 @@ class AppState extends ChangeNotifier {
     } else {
       visitedStates.add(name);
     }
+    await _save();
+    notifyListeners();
+  }
+
+  /// Mark every state/UT as visited (bulk select).
+  Future<void> selectAllStates(Iterable<String> all) async {
+    visitedStates = all.toSet();
+    await _save();
+    notifyListeners();
+  }
+
+  /// Clear every visited state/UT.
+  Future<void> clearStates() async {
+    visitedStates.clear();
     await _save();
     notifyListeners();
   }
@@ -68,6 +126,7 @@ class AppState extends ChangeNotifier {
 
   int get statesCount => visitedStates.length;
   int get gemsCount => visitedGems.length;
+  int get districtsCount => visitedDistricts.length;
 
   // --- badges ---------------------------------------------------------------
   List<Badge> badges() {

@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dekho/main.dart';
 import 'package:dekho/state/app_state.dart';
+import 'package:dekho/widgets/district_map.dart';
 import 'package:dekho/widgets/india_map.dart';
 
 Future<AppState> _app(WidgetTester tester) async {
@@ -30,12 +31,27 @@ Future<void> _pumps(WidgetTester tester, [int n = 8]) async {
 /// Note: two IndiaMaps exist (screen + offscreen share card); the screen's
 /// is first in the tree.
 Future<void> _tapRajasthan(WidgetTester tester) async {
-  final rect = tester.getRect(find.byType(IndiaMap).first);
-  final scale = min(rect.width, rect.height) / 1000;
-  final dx = (rect.width - 1000 * scale) / 2;
-  final dy = (rect.height - 1000 * scale) / 2;
-  await tester.tapAt(rect.topLeft + Offset(dx + 184 * scale, dy + 308 * scale));
-  await _pumps(tester);
+  final mapFinder = find.byType(IndiaMap).first;
+  final scrollable = find.byType(SingleChildScrollView).first;
+  // The Rajasthan tap point sits in the map's upper third. The screen has
+  // grown taller, so drag the scroll view until the point clears the
+  // bottom nav (test viewport is only 600px tall).
+  for (var i = 0; i < 4; i++) {
+    final rect = tester.getRect(mapFinder);
+    final scale = min(rect.width, rect.height) / 1000;
+    final dx = (rect.width - 1000 * scale) / 2;
+    final dy = (rect.height - 1000 * scale) / 2;
+    final pt =
+        rect.topLeft + Offset(dx + 184 * scale, dy + 308 * scale);
+    if (pt.dy < 500) {
+      await tester.tapAt(pt);
+      await _pumps(tester);
+      return;
+    }
+    await tester.drag(scrollable, const Offset(0, -160));
+    await _pumps(tester);
+  }
+  fail('could not bring the Rajasthan tap point into view');
 }
 
 void main() {
@@ -66,8 +82,40 @@ void main() {
     });
   });
 
-  group('navigation', () {
-    testWidgets('all four tabs render', (tester) async {
+  group('district collection', () {
+    testWidgets('districts mode toggles a district + counter',
+        (tester) async {
+      final state = await _app(tester);
+      // switch to Districts level
+      await tester.tap(find.text('Districts'));
+      await _pumps(tester);
+      expect(find.text('0 / 785'), findsOneWidget);
+
+      // tap the center of the district map (Rajasthan's default view).
+      // The map may sit low on the short test viewport, so drag it up first.
+      final mapFinder = find.byType(DistrictMap);
+      expect(mapFinder, findsOneWidget);
+      final scrollable = find.byType(Scrollable).first;
+      for (var i = 0; i < 4; i++) {
+        final rect = tester.getRect(mapFinder);
+        if (rect.center.dy < 500) break;
+        await tester.drag(scrollable, const Offset(0, -160));
+        await _pumps(tester);
+      }
+      final rect = tester.getRect(mapFinder);
+      await tester.tapAt(rect.center);
+      await _pumps(tester);
+      expect(state.districtsCount, 1);
+      expect(find.text('1 / 785'), findsOneWidget);
+
+      // persistence across restart
+      final state2 = AppState();
+      await state2.init();
+      expect(state2.districtsCount, 1);
+    });
+  });
+
+  group('navigation', () {    testWidgets('all four tabs render', (tester) async {
       await _app(tester);
       await tester.tap(find.text('Hidden Gems'));
       await _pumps(tester);
@@ -92,6 +140,8 @@ void main() {
         (tester) async {
       await _app(tester);
       await tester.tap(find.text('Trip Plan'));
+      await _pumps(tester);
+      await tester.scrollUntilVisible(find.text('Plan my trip'), 200);
       await _pumps(tester);
       await tester.tap(find.text('Plan my trip'));
       await _pumps(tester, 12);

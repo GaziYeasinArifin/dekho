@@ -37,7 +37,10 @@ Future<void> _pumps(WidgetTester tester, [int n = 12]) async {
 
 void main() {
   testWidgets('dekho screenshots', (tester) async {
-    if (_isCi) markTestSkipped('golden PNGs are not committed; local-only');
+    if (_isCi) {
+      markTestSkipped('golden PNGs are not committed; local-only');
+      return;
+    }
     SharedPreferences.setMockInitialValues({});
     await tester.runAsync(_loadFonts);
 

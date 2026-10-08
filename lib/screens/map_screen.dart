@@ -34,7 +34,7 @@ class _MapScreenState extends State<MapScreen> {
     super.dispose();
   }
 
-  Future<void> _share() async {
+  Future<void> _share(BuildContext btnCtx) async {
     setState(() => _busy = true);
     try {
       // render the offscreen card
@@ -43,8 +43,16 @@ class _MapScreenState extends State<MapScreen> {
       final img = await boundary.toImage(pixelRatio: 3.0);
       final data = await img.toByteData(format: ui.ImageByteFormat.png);
       final bytes = data!.buffer.asUint8List();
+      // anchor for the iPad share popover
+      final box =
+          btnCtx.mounted ? btnCtx.findRenderObject() as RenderBox? : null;
+      final origin =
+          box == null ? null : box.localToGlobal(Offset.zero) & box.size;
       await exportCardPng(
-          bytes, 'dekho-card-${DateTime.now().millisecondsSinceEpoch}.png');
+        bytes,
+        'dekho-card-${DateTime.now().millisecondsSinceEpoch}.png',
+        sharePositionOrigin: origin,
+      );
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -159,18 +167,20 @@ class _MapScreenState extends State<MapScreen> {
                     onChanged: st.setUserName,
                   ),
                   const SizedBox(height: 12),
-                  FilledButton.icon(
-                    onPressed: _busy ? null : _share,
-                    icon: _busy
-                        ? const SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CircularProgressIndicator(
-                                strokeWidth: 2, color: Colors.white))
-                        : const Icon(Icons.share),
-                    label: Text(_busy
-                        ? S.tr('downloading', loc)
-                        : S.tr('shareCard', loc)),
+                  Builder(
+                    builder: (btnCtx) => FilledButton.icon(
+                      onPressed: _busy ? null : () => _share(btnCtx),
+                      icon: _busy
+                          ? const SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(
+                                  strokeWidth: 2, color: Colors.white))
+                          : const Icon(Icons.share),
+                      label: Text(_busy
+                          ? S.tr('downloading', loc)
+                          : S.tr('shareCard', loc)),
+                    ),
                   ),
                 ],
               ),

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Dekho — apna desh, apna naksha. Mark the Indian states you've visited, discover hidden gems, and share your personal travel map.">
+  <meta name="theme-color" content="#0E5F5C">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dekho — apna desh, apna naksha</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body { background: #FAF6EC; margin: 0; }
+    #loading {
+      position: fixed; inset: 0; display: flex; align-items: center;
+      justify-content: center; flex-direction: column; gap: 16px;
+      font-family: system-ui, sans-serif; color: #221C2A;
+    }
+    .eye {
+      width: 56px; height: 56px; border-radius: 16px; background: #0E5F5C;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 30px;
+    }
+    .bar { width: 160px; height: 4px; background: #E9E1CC; border-radius: 2px; overflow: hidden; }
+    .bar > div { height: 100%; width: 40%; background: #E8A020; border-radius: 2px; animation: slide 1.2s infinite ease-in-out; }
+    @keyframes slide { 0% { margin-left: -40%; } 100% { margin-left: 100%; } }
+  </style>
+</head>
+<body>
+  <div id="loading">
+    <div class="eye">◉</div>
+    <div style="font-weight:800;font-size:28px;letter-spacing:-1px">dekho</div>
+    <div style="color:#4A4356;font-size:13px">apna desh, apna naksha</div>
+    <div class="bar"><div></div></div>
+  </div>
+  <script src="flutter_bootstrap.js" async></script>
+  <script>
+    window.addEventListener('flutter-first-frame', function () {
+      var el = document.getElementById('loading');
+      if (el) el.remove();
+    });
+  </script>
+</body>
+</html>

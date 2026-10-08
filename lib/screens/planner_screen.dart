@@ -160,22 +160,52 @@ class _PlannerScreenState extends State<PlannerScreen> {
               ],
             ),
             const Divider(),
-            for (final g in d.gems)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Row(
-                  children: [
-                    const Icon(Icons.place,
-                        size: 16, color: DekhoColors.marigoldDeep),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                          '${loc == 'hi' ? g.nameHi : g.name} · ${g.district}',
-                          style: const TextStyle(fontSize: 14)),
+            if (d.isExploreDay)
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: DekhoColors.marigold.withValues(alpha: 0.18),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                  ],
+                    child: const Icon(Icons.explore,
+                        size: 18, color: DekhoColors.marigoldDeep),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(S.tr('exploreDay', loc),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w700, fontSize: 14)),
+                        const SizedBox(height: 2),
+                        Text(S.tr('exploreDayDesc', loc),
+                            style: const TextStyle(
+                                fontSize: 13, color: DekhoColors.inkSoft)),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+            else
+              for (final g in d.gems)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.place,
+                          size: 16, color: DekhoColors.marigoldDeep),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                            '${loc == 'hi' ? g.nameHi : g.name} · ${g.district}',
+                            style: const TextStyle(fontSize: 14)),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
           ],
         ),
       ),

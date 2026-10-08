@@ -34,35 +34,35 @@ class AppState extends ChangeNotifier {
     await p.setString(_kName, userName);
   }
 
-  void toggleState(String name) {
+  Future<void> toggleState(String name) async {
     if (visitedStates.contains(name)) {
       visitedStates.remove(name);
     } else {
       visitedStates.add(name);
     }
-    _save();
+    await _save();
     notifyListeners();
   }
 
-  void toggleGem(String id) {
+  Future<void> toggleGem(String id) async {
     if (visitedGems.contains(id)) {
       visitedGems.remove(id);
     } else {
       visitedGems.add(id);
     }
-    _save();
+    await _save();
     notifyListeners();
   }
 
-  void setLocale(String l) {
+  Future<void> setLocale(String l) async {
     locale = l;
-    _save();
+    await _save();
     notifyListeners();
   }
 
-  void setUserName(String n) {
+  Future<void> setUserName(String n) async {
     userName = n;
-    _save();
+    await _save();
     notifyListeners();
   }
 

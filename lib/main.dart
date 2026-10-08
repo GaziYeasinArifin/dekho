@@ -74,9 +74,13 @@ class _MainTabsState extends State<MainTabs> {
                     fontSize: 22,
                     letterSpacing: -0.5)),
             const SizedBox(width: 8),
-            Text(S.tr('tagline', loc),
-                style: const TextStyle(
-                    fontSize: 11, color: DekhoColors.inkSoft)),
+            Flexible(
+              child: Text(S.tr('tagline', loc),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                      fontSize: 11, color: DekhoColors.inkSoft)),
+            ),
           ],
         ),
         actions: [

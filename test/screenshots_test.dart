@@ -1,5 +1,7 @@
 // Renders real screenshots of the app UI into test/goldens/.
-// Run: flutter test --update-goldens test/screenshots_test.dart
+// Run: flutter test --timeout 300s --update-goldens test/screenshots_test.dart
+// NOTE: font loading must run inside tester.runAsync (engine calls hang
+// in the testWidgets zone otherwise).
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,14 +19,24 @@ Future<void> _loadFonts() async {
     loader.addFont(Future.value(ByteData.sublistView(data)));
   }
   await loader.load();
+  // Material icons so screenshots show real glyphs, not tofu.
+  final iconData = await File('$base/MaterialIcons-Regular.otf').readAsBytes();
+  final iconLoader = FontLoader('MaterialIcons')
+    ..addFont(Future.value(ByteData.sublistView(iconData)));
+  await iconLoader.load();
+}
+
+Future<void> _pumps(WidgetTester tester, [int n = 12]) async {
+  for (var i = 0; i < n; i++) {
+    await tester.pump(const Duration(milliseconds: 100));
+  }
 }
 
 void main() {
   testWidgets('dekho screenshots', (tester) async {
     SharedPreferences.setMockInitialValues({});
-    await _loadFonts();
+    await tester.runAsync(_loadFonts);
 
-    // iPhone-ish canvas
     tester.view.physicalSize = const Size(1170, 2532);
     tester.view.devicePixelRatio = 3.0;
     addTearDown(tester.view.resetPhysicalSize);
@@ -32,40 +44,36 @@ void main() {
 
     final state = AppState();
     await state.init();
-    state.setUserName('Aarav');
+    await state.setUserName('Aarav');
     for (final s in [
       'Rajasthan', 'Kerala', 'Assam', 'Himachal Pradesh', 'Tamil Nadu', 'Goa'
     ]) {
-      state.toggleState(s);
+      await state.toggleState(s);
     }
-    state.toggleGem('chand-baori');
-    state.toggleGem('nongriat');
+    await state.toggleGem('chand-baori');
+    await state.toggleGem('nongriat');
 
     await tester.pumpWidget(DekhoApp(state: state));
-    await tester.pumpAndSettle();
+    await _pumps(tester);
 
-    // 1. Map tab
     await expectLater(
         find.byType(MaterialApp), matchesGoldenFile('goldens/01_map.png'));
 
-    // 2. Hidden Gems tab
     await tester.tap(find.text('Hidden Gems'));
-    await tester.pumpAndSettle();
+    await _pumps(tester);
     await expectLater(
         find.byType(MaterialApp), matchesGoldenFile('goldens/02_gems.png'));
 
-    // 3. Trip Plan tab + generate a plan
     await tester.tap(find.text('Trip Plan'));
-    await tester.pumpAndSettle();
+    await _pumps(tester);
     await tester.tap(find.text('Plan my trip'));
-    await tester.pumpAndSettle();
+    await _pumps(tester, 20);
     await expectLater(
         find.byType(MaterialApp), matchesGoldenFile('goldens/03_planner.png'));
 
-    // 4. Badges tab
     await tester.tap(find.text('Badges'));
-    await tester.pumpAndSettle();
+    await _pumps(tester);
     await expectLater(
         find.byType(MaterialApp), matchesGoldenFile('goldens/04_badges.png'));
-  });
+  }, timeout: const Timeout(Duration(minutes: 8)));
 }

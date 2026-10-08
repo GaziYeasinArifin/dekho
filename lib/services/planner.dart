@@ -21,6 +21,7 @@ List<TripDay> buildPlan({
   required int days,
   required int totalBudget,
   Set<String>? states,
+  int travelers = 1,
 }) {
   if (pool.isEmpty || days < 1) return [];
   var candidates = states == null || states.isEmpty
@@ -28,7 +29,8 @@ List<TripDay> buildPlan({
       : pool.where((g) => states.contains(g.state)).toList();
   if (candidates.isEmpty) candidates = List<HiddenGem>.from(pool);
 
-  final perDay = totalBudget / days;
+  // gem budgets are per person; split the daily budget across the group
+  final perDay = totalBudget / days / travelers.clamp(1, 99);
   // prefer gems that fit the daily budget, keep a couple of splurges
   candidates.sort((a, b) {
     int score(HiddenGem g) {

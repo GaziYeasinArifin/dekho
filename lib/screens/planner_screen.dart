@@ -16,6 +16,7 @@ class PlannerScreen extends StatefulWidget {
 class _PlannerScreenState extends State<PlannerScreen> {
   double _days = 4;
   double _budget = 20000;
+  double _travelers = 2;
   final Set<String> _states = {};
   List<TripDay> _plan = [];
   bool _planned = false;
@@ -62,6 +63,14 @@ class _PlannerScreenState extends State<PlannerScreen> {
                 divisions: 19,
                 label: '₹${_inr(_budget.toInt())}',
                 onChanged: (v) => setState(() => _budget = v)),
+            _label('${S.tr('travelers', loc)}: ${_travelers.toInt()}'),
+            Slider(
+                value: _travelers,
+                min: 1,
+                max: 10,
+                divisions: 9,
+                label: '${_travelers.toInt()}',
+                onChanged: (v) => setState(() => _travelers = v)),
             _label(S.tr('states', loc)),
             Wrap(
               spacing: 8,
@@ -93,6 +102,7 @@ class _PlannerScreenState extends State<PlannerScreen> {
                   days: _days.toInt(),
                   totalBudget: _budget.toInt(),
                   states: _states,
+                  travelers: _travelers.toInt(),
                 );
                 _planned = true;
               }),

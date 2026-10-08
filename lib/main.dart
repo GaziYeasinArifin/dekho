@@ -103,7 +103,14 @@ class _MainTabsState extends State<MainTabs> {
           ),
         ],
       ),
-      body: IndexedStack(index: _index, children: tabs),
+      body: Center(
+        // On wide (desktop) screens, keep the app in a phone-like column
+        // instead of stretching content across the window.
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 560),
+          child: IndexedStack(index: _index, children: tabs),
+        ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _index,
         onTap: (i) => setState(() => _index = i),

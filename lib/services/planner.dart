@@ -1,16 +1,20 @@
 import 'dart:math';
 import '../data/gems.dart';
 
-/// One day of a generated itinerary.
+/// One day of a generated itinerary. A day with no gems is an "open
+/// exploration" day (revisit a favourite, wander) rather than a gap.
 class TripDay {
   final int day;
   final List<HiddenGem> gems;
   final int estCost; // INR per person
   const TripDay(this.day, this.gems, this.estCost);
+
+  bool get isExploreDay => gems.isEmpty;
 }
 
 /// Offline heuristic planner: picks affordable gems, orders them with a
-/// nearest-neighbour route, and chunks ~2 gems per day with cost estimates.
+/// nearest-neighbour route, and spreads them across ALL requested days.
+/// Days beyond the gem count become low-cost open-exploration days.
 /// Swap this with an LLM-backed planner later — the UI won't change.
 List<TripDay> buildPlan({
   required List<HiddenGem> pool,
@@ -51,16 +55,24 @@ List<TripDay> buildPlan({
     ordered.add(cur);
   }
 
-  // chunk into days
+  // Spread gems across every day: first `remainder` days get one extra.
+  // This keeps route order and guarantees no requested day is dropped.
+  final base = ordered.length ~/ days;
+  final remainder = ordered.length % days;
   final result = <TripDay>[];
-  final perChunk = (ordered.length / days).ceil().clamp(1, 3);
+  var idx = 0;
   for (var d = 0; d < days; d++) {
-    final chunk =
-        ordered.skip(d * perChunk).take(perChunk).toList();
-    if (chunk.isEmpty) break;
-    final cost = chunk.fold<int>(0, (s, g) => s + g.budgetPerDay) +
-        600; // inter-gem travel buffer
-    result.add(TripDay(d + 1, chunk, cost));
+    final count = base + (d < remainder ? 1 : 0);
+    final chunk = ordered.skip(idx).take(count).toList();
+    idx += count;
+    if (chunk.isEmpty) {
+      // Open exploration day: stay + food buffer, no gem ticket costs.
+      result.add(TripDay(d + 1, const [], 800));
+    } else {
+      final cost = chunk.fold<int>(0, (s, g) => s + g.budgetPerDay) +
+          600; // inter-gem travel buffer
+      result.add(TripDay(d + 1, chunk, cost));
+    }
   }
   return result;
 }

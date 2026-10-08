@@ -13,6 +13,9 @@ class HiddenGem {
   final String food;
   final double lat;
   final double lng;
+  final String? photoAsset; // e.g. 'assets/images/gems/chand-baori.jpg'
+  final String? photoCredit; // "Name (CC BY-SA 4.0)"
+  final String? photoSource; // commons file page URL
 
   const HiddenGem({
     required this.id,
@@ -28,6 +31,9 @@ class HiddenGem {
     required this.food,
     required this.lat,
     required this.lng,
+    this.photoAsset,
+    this.photoCredit,
+    this.photoSource,
   });
 }
 
@@ -41,6 +47,9 @@ const List<HiddenGem> hiddenGems = [
     stay: 'Guesthouses in Abhaneri village from ₹800',
     food: 'Dal baati churma at village dhabas',
     lat: 27.007, lng: 76.606,
+    photoAsset: 'assets/images/gems/chand-baori.jpg',
+    photoCredit: 'Shikhers (CC BY-SA 4.0)',
+    photoSource: 'https://commons.wikimedia.org/wiki/File:Isometric_view_of_Chand_Baori.jpg',
   ),
   HiddenGem(
     id: 'bhangarh', name: 'Bhangarh Fort', nameHi: 'भानगढ़ किला',
@@ -51,6 +60,9 @@ const List<HiddenGem> hiddenGems = [
     stay: 'Day trip; stay in Alwar from ₹1,000',
     food: 'Kalakand from Alwar\'s famous sweet shops',
     lat: 27.095, lng: 76.287,
+    photoAsset: 'assets/images/gems/bhangarh.jpg',
+    photoCredit: 'Vikramdeep Sidhu from Jhajjar, India (CC BY 2.0)',
+    photoSource: 'https://commons.wikimedia.org/wiki/File:Landscape_near_Bhangarh,_Rajasthan_(9240373168).jpg',
   ),
   HiddenGem(
     id: 'kuldhara', name: 'Kuldhara Village', nameHi: 'कुलधरा',
@@ -61,6 +73,9 @@ const List<HiddenGem> hiddenGems = [
     stay: 'Stay in Jaisalmer; desert camps from ₹1,500',
     food: 'Ker sangri at Jaisalmer old-city kitchens',
     lat: 26.831, lng: 70.782,
+    photoAsset: 'assets/images/gems/kuldhara.jpg',
+    photoCredit: 'कृष्ण कान्त शर्मा (CC BY-SA 4.0)',
+    photoSource: 'https://commons.wikimedia.org/wiki/File:Kuldhara.jpg',
   ),
   HiddenGem(
     id: 'bundi', name: 'Bundi', nameHi: 'बूंदी',
@@ -71,6 +86,9 @@ const List<HiddenGem> hiddenGems = [
     stay: 'Heritage havelis from ₹900',
     food: 'Bundi ke ladoo, obviously',
     lat: 25.435, lng: 75.639,
+    photoAsset: 'assets/images/gems/bundi.jpg',
+    photoCredit: 'Daniel VILLAFRUELA (CC BY-SA 3.0)',
+    photoSource: 'https://commons.wikimedia.org/wiki/File:Bundi-Garh_Palace-20131016.jpg',
   ),
   HiddenGem(
     id: 'sambhar', name: 'Sambhar Salt Lake', nameHi: 'सांभर झील',
@@ -81,6 +99,9 @@ const List<HiddenGem> hiddenGems = [
     stay: 'Day trip from Jaipur',
     food: 'Pyaaz kachori in Sambhar town',
     lat: 26.913, lng: 75.19,
+    photoAsset: 'assets/images/gems/sambhar.jpg',
+    photoCredit: 'Frank Schwichtenberg (CC BY-SA 4.0)',
+    photoSource: 'https://commons.wikimedia.org/wiki/File:CMA_CGM_Sambhar_01.jpg',
   ),
   HiddenGem(
     id: 'shekhawati', name: 'Shekhawati Havelis', nameHi: 'शेखावाटी',
@@ -91,6 +112,9 @@ const List<HiddenGem> hiddenGems = [
     stay: 'Converted havelis from ₹1,200',
     food: 'Bajre ki roti with ghee at haveli kitchens',
     lat: 28.055, lng: 75.147,
+    photoAsset: 'assets/images/gems/shekhawati.jpg',
+    photoCredit: 'dalbera from Paris, France (CC BY 2.0)',
+    photoSource: 'https://commons.wikimedia.org/wiki/File:Peinture_murale_(Sneh_Ram_Ladias_Haveli,_Mandawa)_(8429099877).jpg',
   ),
   HiddenGem(
     id: 'majuli', name: 'Majuli Island', nameHi: 'माजुली',
@@ -101,6 +125,9 @@ const List<HiddenGem> hiddenGems = [
     stay: 'Bamboo cottages & satra guesthouses from ₹800',
     food: 'Apong (rice beer) with tribal thali',
     lat: 27.001, lng: 94.224,
+    photoAsset: 'assets/images/gems/majuli.jpg',
+    photoCredit: 'Udit Kapoor (CC BY-SA 4.0)',
+    photoSource: 'https://commons.wikimedia.org/wiki/File:Majuli_-_The_largest_river_island.jpg',
   ),
   HiddenGem(
     id: 'sivasagar', name: 'Sivasagar Monuments', nameHi: 'शिवसागर',
@@ -111,6 +138,9 @@ const List<HiddenGem> hiddenGems = [
     stay: 'Hotels in Sivasagar town from ₹900',
     food: 'Khar & tenga fish curry',
     lat: 26.984, lng: 94.637,
+    photoAsset: 'assets/images/gems/sivasagar.jpg',
+    photoCredit: 'Nayan j Nath (CC BY 4.0)',
+    photoSource: 'https://commons.wikimedia.org/wiki/File:Rang_Ghar_The_first_Indian_pavilion.jpg',
   ),
   HiddenGem(
     id: 'haflong', name: 'Haflong', nameHi: 'हाफलांग',
@@ -121,6 +151,9 @@ const List<HiddenGem> hiddenGems = [
     stay: 'Homestays from ₹1,000',
     food: 'Smoked pork with bamboo shoot (Dimasa kitchens)',
     lat: 25.169, lng: 93.017,
+    photoAsset: 'assets/images/gems/haflong.jpg',
+    photoCredit: 'Thoiba Paonam (CC BY-SA 4.0)',
+    photoSource: 'https://commons.wikimedia.org/wiki/File:Haflong_Lake.jpg',
   ),
   HiddenGem(
     id: 'nongriat', name: 'Double-Decker Root Bridge', nameHi: 'डबल डेकर रूट ब्रिज',
@@ -131,6 +164,9 @@ const List<HiddenGem> hiddenGems = [
     stay: 'Homestays in Nongriat from ₹700',
     food: 'Jadoh (Khasi rice-meat) after the climb',
     lat: 25.244, lng: 91.671,
+    photoAsset: 'assets/images/gems/nongriat.jpg',
+    photoCredit: 'Arshiya Urveeja Bose (CC BY 2.0)',
+    photoSource: 'https://commons.wikimedia.org/wiki/File:Living_root_bridges,_Nongriat_village,_Meghalaya.jpg',
   ),
   HiddenGem(
     id: 'mawlynnong', name: 'Mawlynnong', nameHi: 'मावलिननॉंग',
@@ -141,6 +177,9 @@ const List<HiddenGem> hiddenGems = [
     stay: 'Village homestays from ₹900',
     food: 'Tungrymbai (fermented soybean curry)',
     lat: 25.204, lng: 91.914,
+    photoAsset: 'assets/images/gems/mawlynnong.jpg',
+    photoCredit: 'Sujan Bandyopadhyay (CC BY-SA 4.0)',
+    photoSource: 'https://commons.wikimedia.org/wiki/File:Bamboo_House_in_Mawlynnong_Village,_India._Bangladesh_View_Point.jpg',
   ),
   HiddenGem(
     id: 'krang-suri', name: 'Krang Suri Falls', nameHi: 'क्रांग सूरी जलप्रपात',
@@ -151,6 +190,9 @@ const List<HiddenGem> hiddenGems = [
     stay: 'Jowai town stays from ₹1,000',
     food: 'Pumaloi (steamed rice cakes)',
     lat: 25.352, lng: 92.101,
+    photoAsset: 'assets/images/gems/krang-suri.jpg',
+    photoCredit: 'ANKAN (CC BY-SA 4.0)',
+    photoSource: 'https://commons.wikimedia.org/wiki/File:Krang_Suri_Waterfall.jpg',
   ),
   HiddenGem(
     id: 'muzhappilangad', name: 'Muzhappilangad Beach', nameHi: 'मुझप्पिलंगाड बीच',
@@ -161,6 +203,9 @@ const List<HiddenGem> hiddenGems = [
     stay: 'Beach homestays from ₹1,000',
     food: 'Kannur biryani + mussels fry',
     lat: 11.794, lng: 75.448,
+    photoAsset: 'assets/images/gems/muzhappilangad.jpg',
+    photoCredit: 'Ajeeshkumar4u (CC BY-SA 4.0)',
+    photoSource: 'https://commons.wikimedia.org/wiki/File:Muzhappilangad_beach12.jpg',
   ),
   HiddenGem(
     id: 'bekal', name: 'Bekal Fort', nameHi: 'बेकल किला',
@@ -171,6 +216,9 @@ const List<HiddenGem> hiddenGems = [
     stay: 'Resorts & homestays from ₹1,100',
     food: 'Kasaragod fish molee',
     lat: 12.392, lng: 75.032,
+    photoAsset: 'assets/images/gems/bekal.jpg',
+    photoCredit: 'Vijayanrajapuram (CC BY-SA 4.0)',
+    photoSource: 'https://commons.wikimedia.org/wiki/File:Bekal_fort_kasaragod_01.jpg',
   ),
   HiddenGem(
     id: 'chitkul', name: 'Chitkul', nameHi: 'छितकुल',
@@ -181,6 +229,9 @@ const List<HiddenGem> hiddenGems = [
     stay: 'Wooden homestays from ₹900',
     food: 'Siddu (stuffed steamed bread) with ghee',
     lat: 28.94, lng: 78.443,
+    photoAsset: 'assets/images/gems/chitkul.jpg',
+    photoCredit: 'Shivendujha (CC BY-SA 4.0)',
+    photoSource: 'https://commons.wikimedia.org/wiki/File:Last_Dhaba_Chitkul.jpg',
   ),
   HiddenGem(
     id: 'spiti-key', name: 'Key Monastery, Spiti', nameHi: 'की मठ, स्पीति',
@@ -191,6 +242,9 @@ const List<HiddenGem> hiddenGems = [
     stay: 'Monastery guesthouses & homestays from ₹800',
     food: 'Thukpa & butter tea at monastery kitchens',
     lat: 32.298, lng: 78.015,
+    photoAsset: 'assets/images/gems/spiti-key.jpg',
+    photoCredit: 'TheWanderer7562 (CC BY-SA 3.0)',
+    photoSource: 'https://commons.wikimedia.org/wiki/File:Key_Monastery.jpg',
   ),
   HiddenGem(
     id: 'ziro', name: 'Ziro Valley', nameHi: 'ज़ीरो घाटी',
@@ -201,6 +255,9 @@ const List<HiddenGem> hiddenGems = [
     stay: 'Bamboo homestays from ₹1,000 (ILP required)',
     food: 'Smoked meat with bamboo shoot',
     lat: 27.635, lng: 93.832,
+    photoAsset: 'assets/images/gems/ziro.jpg',
+    photoCredit: 'Wikimedia Commons contributor (Public domain)',
+    photoSource: 'https://commons.wikimedia.org/wiki/File:Clean_ziro_green_ziro.jpeg',
   ),
   HiddenGem(
     id: 'dholavira', name: 'Dholavira', nameHi: 'धोलावीरा',
@@ -211,6 +268,9 @@ const List<HiddenGem> hiddenGems = [
     stay: 'Bhuj hotels from ₹1,000; day trip works',
     food: 'Kutchi dabeli on the road',
     lat: 23.893, lng: 70.216,
+    photoAsset: 'assets/images/gems/dholavira.jpg',
+    photoCredit: 'Bhajish Bharathan (CC BY-SA 4.0)',
+    photoSource: 'https://commons.wikimedia.org/wiki/File:Water_reservoir_at_Dholavira_site.jpg',
   ),
   HiddenGem(
     id: 'bhitarkanika', name: 'Bhitarkanika Mangroves', nameHi: 'भितरकनिका',
@@ -221,6 +281,9 @@ const List<HiddenGem> hiddenGems = [
     stay: 'Forest cottages & homestays from ₹1,100',
     food: 'Chingudi (prawn) curry, Odia style',
     lat: 20.747, lng: 86.916,
+    photoAsset: 'assets/images/gems/bhitarkanika.jpg',
+    photoCredit: 'Nandita Madhu (CC BY-SA 4.0)',
+    photoSource: 'https://commons.wikimedia.org/wiki/File:Mangrove_Pitta_in_Bhitarkanika.jpg',
   ),
   HiddenGem(
     id: 'chandipur', name: 'Chandipur Beach', nameHi: 'चांदीपुर बीच',
@@ -231,6 +294,9 @@ const List<HiddenGem> hiddenGems = [
     stay: 'OTDC cottages & hotels from ₹900',
     food: 'Crab kalia at beach shacks',
     lat: 21.469, lng: 87.02,
+    photoAsset: 'assets/images/gems/chandipur.jpg',
+    photoCredit: 'Nihar.race (CC BY-SA 4.0)',
+    photoSource: 'https://commons.wikimedia.org/wiki/File:Sunset_at_Chandipur_Sea_Beach,_Odisha.jpg',
   ),
 ];
 

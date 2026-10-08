@@ -162,17 +162,23 @@ class _IndiaMapPainter extends CustomPainter {
       canvas.drawPath(_IndiaMapState._paths[s.name]!, stroke);
       canvas.drawPath(_IndiaMapState._paths[s.name]!, strokeInk);
     }
-    // pass 4: dot markers for tiny states so they're visible
-    final dotPaint = Paint()..color = DekhoColors.inkSoft;
+    // pass 4: dot markers for tiny states/UTs so they're visible & tappable.
+    // Small and subtle: teal when unvisited, marigold when visited,
+    // with a paper ring so they read as markers, not blobs.
+    final dotIdle = Paint()..color = DekhoColors.teal;
     final dotVisited = Paint()..color = DekhoColors.marigoldDeep;
+    final dotRing = Paint()
+      ..color = DekhoColors.paper
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.6 / scale;
     for (final s in indiaStates) {
       final b = _IndiaMapState._paths[s.name]!.getBounds();
       if (b.width < 14 && b.height < 14) {
+        final c = Offset(s.labelX.toDouble(), s.labelY.toDouble());
+        final r = 5.5 / scale;
         canvas.drawCircle(
-          Offset(s.labelX.toDouble(), s.labelY.toDouble()),
-          7 / scale * 2.2,
-          visited.contains(s.name) ? dotVisited : dotPaint,
-        );
+            c, r, visited.contains(s.name) ? dotVisited : dotIdle);
+        canvas.drawCircle(c, r, dotRing);
       }
     }
     canvas.restore();

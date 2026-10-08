@@ -2,6 +2,7 @@
 // Run: flutter test --timeout 300s --update-goldens test/screenshots_test.dart
 // NOTE: font loading must run inside tester.runAsync (engine calls hang
 // in the testWidgets zone otherwise).
+// Skipped in CI: golden PNGs are not committed and fonts are local-only.
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +10,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dekho/main.dart';
 import 'package:dekho/state/app_state.dart';
+
+bool get _isCi => Platform.environment['CI'] == 'true';
 
 Future<void> _loadFonts() async {
   const base =
@@ -34,6 +37,7 @@ Future<void> _pumps(WidgetTester tester, [int n = 12]) async {
 
 void main() {
   testWidgets('dekho screenshots', (tester) async {
+    if (_isCi) markTestSkipped('golden PNGs are not committed; local-only');
     SharedPreferences.setMockInitialValues({});
     await tester.runAsync(_loadFonts);
 

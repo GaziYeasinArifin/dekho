@@ -13,6 +13,7 @@ class ShareCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = state.locale;
+    final theme = dekhoMapThemes[state.mapTheme.clamp(0, dekhoMapThemes.length - 1)];
     final name = state.userName.isEmpty
         ? (loc == 'hi' ? 'मुसाफ़िर' : 'Traveller')
         : state.userName;
@@ -72,10 +73,10 @@ class ShareCard extends StatelessWidget {
                       fontWeight: FontWeight.w800,
                       color: DekhoColors.ink)),
               Text(state.travelerTitle(),
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: DekhoColors.teal)),
+                      color: theme.accent)),
               const SizedBox(height: 8),
               // mini map
               Expanded(
@@ -87,7 +88,9 @@ class ShareCard extends StatelessWidget {
                   ),
                   padding: const EdgeInsets.all(10),
                   child: IndiaMap(
-                      visited: state.visitedStates, interactive: false),
+                      visited: state.visitedStates,
+                      interactive: false,
+                      theme: theme),
                 ),
               ),
               const SizedBox(height: 12),

@@ -9,13 +9,18 @@ class IndiaMap extends StatefulWidget {
   final Set<String> visited;
   final ValueChanged<String>? onToggle;
   final bool interactive;
+  final DekhoMapTheme? theme;
 
   const IndiaMap({
     super.key,
     required this.visited,
     this.onToggle,
     this.interactive = true,
+    this.theme,
   });
+
+  /// Effective theme: the passed one, or the default Teal Ink.
+  DekhoMapTheme get effectiveTheme => theme ?? dekhoMapThemes[0];
 
   @override
   State<IndiaMap> createState() => _IndiaMapState();
@@ -98,6 +103,7 @@ class _IndiaMapState extends State<IndiaMap> {
               painter: _IndiaMapPainter(
                 visited: widget.visited,
                 hover: _hover,
+                theme: widget.effectiveTheme,
               ),
             ),
           ),
@@ -110,8 +116,10 @@ class _IndiaMapState extends State<IndiaMap> {
 class _IndiaMapPainter extends CustomPainter {
   final Set<String> visited;
   final String? hover;
+  final DekhoMapTheme theme;
 
-  _IndiaMapPainter({required this.visited, this.hover});
+  _IndiaMapPainter(
+      {required this.visited, this.hover, required this.theme});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -123,13 +131,13 @@ class _IndiaMapPainter extends CustomPainter {
     canvas.scale(scale);
 
     final fillVisited = Paint()
-      ..color = DekhoColors.marigold
+      ..color = theme.visited
       ..style = PaintingStyle.fill;
     final fillIdle = Paint()
-      ..color = DekhoColors.sand
+      ..color = theme.unvisited
       ..style = PaintingStyle.fill;
     final fillHover = Paint()
-      ..color = DekhoColors.teal.withValues(alpha: 0.25)
+      ..color = theme.accent.withValues(alpha: 0.25)
       ..style = PaintingStyle.fill;
     final stroke = Paint()
       ..color = DekhoColors.paper
@@ -163,10 +171,10 @@ class _IndiaMapPainter extends CustomPainter {
       canvas.drawPath(_IndiaMapState._paths[s.name]!, strokeInk);
     }
     // pass 4: dot markers for tiny states/UTs so they're visible & tappable.
-    // Small and subtle: teal when unvisited, marigold when visited,
+    // Small and subtle: accent when unvisited, visited-fill when visited,
     // with a paper ring so they read as markers, not blobs.
-    final dotIdle = Paint()..color = DekhoColors.teal;
-    final dotVisited = Paint()..color = DekhoColors.marigoldDeep;
+    final dotIdle = Paint()..color = theme.accent;
+    final dotVisited = Paint()..color = theme.visited;
     final dotRing = Paint()
       ..color = DekhoColors.paper
       ..style = PaintingStyle.stroke

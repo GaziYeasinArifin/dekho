@@ -278,7 +278,7 @@ class _MapScreenState extends State<MapScreen> {
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemCount: dekhoMapThemes.length,
-                      separatorBuilder: (_, __) =>
+                      separatorBuilder: (_, _) =>
                           const SizedBox(width: 10),
                       itemBuilder: (ctx, i) {
                         final t = dekhoMapThemes[i];
@@ -489,7 +489,7 @@ class _StateList extends StatelessWidget {
               : ListView.separated(
                   shrinkWrap: true,
                   itemCount: filtered.length,
-                  separatorBuilder: (_, __) =>
+                  separatorBuilder: (_, _) =>
                       const Divider(height: 1, indent: 56),
                   itemBuilder: (ctx, i) {
                     final s = filtered[i];
